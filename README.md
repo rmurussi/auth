@@ -1,4 +1,4 @@
-Kohana auth module - with PostgresSQL
+Kohana auth module - with Postgres *ORM*
 ---
 | ver   | Stable                                                                                                                       | Develop                                                                                                                        |
 |-------|------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
@@ -15,3 +15,40 @@ I've forked the main Auth module because there were some fundamental flaws with 
     - I've fixed this by returning an empty user model by default. You can override what gets returned (if you've changed your user model class name for instance) by overloading the get_user() method in your application.
 
 These changes should be merged into the mainline branch eventually, but they completely break the API, so likely won't be done until 3.1.
+
+------------------------------------------------------------------
+Hey friend, you'r in right place!
+## After start ##
+I was forced to fork, because i not found a repo that conect on postgres.
+This module depends my other fork ORM - *https://github.com/rmurussi/orm*
+
+## php 7.4
+
+### Considerations
+## 1 On Postgres you need to use `schema.table` on queries, or you'll receive error.
+## 2 Kohana ORM will build these alias as `table name`.
+## 3 On modules/ORM/Model you must create Folder[Schema Name] and Files[table name] Like:
+	`modules/ORM/Model/Xwood/Person.php class Model_XWood_Person {..}`
+
+## For dribble other erros, i prefer that you use my Fork Kohana/ORM -> *https://github.com/rmurussi/orm*
+
+###############
+## Let's GO! ##
+###############
+
+#1. Start including these modules on your app like:
+`$. git submodule add https://github.com/rmurussi/auth modules/auth`
+`$. git submodule add https://github.com/rmurussi/orm modules/orm`
+
+#2. set bootstrap to load these module:
+	`Kohana::modules(array(
+		'auth'       => MODPATH.'auth',
+		'orm'        => MODPATH.'orm',`
+
+#3. Then set data config of database in: `modules/auth/config/auth.php`
+
+#4. do a test on your index.php, ex:
+	`$obAuth = Auth::instance();
+	$bol = $obAuth->login('valid_username', 'valid_and_no_hash_password', FALSE);
+	var_dump($bol);
+	die;`
